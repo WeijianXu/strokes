@@ -13,6 +13,7 @@ export default class Home extends Component {
 			queryDuration: 0,
 			dataCount: 0,
 			notebookId: '',
+			pageNum: 1,
 			firstData: {},
 		};
 
@@ -20,9 +21,9 @@ export default class Home extends Component {
     realm.init();
 	}
 
-	componentDidMount() {
+	/* componentDidMount() {
 		realm.clear()
-	}
+	} */
 	
 	createData = () => {
 		const begin = new Date().getTime();
@@ -80,9 +81,9 @@ export default class Home extends Component {
 	}
 
 	queryData = () => {
-		const { notebookId } = this.state;
+		const { notebookId, pageNum } = this.state;
 		const begin = new Date().getTime();
-		const strokes = Db.Strokes.groudByNotebookId(notebookId, 1);
+		const strokes = Db.Strokes.groudByNotebookId(notebookId, pageNum);
 		console.log('====================================');
 		console.log('strokes: ', strokes);
 		console.log('====================================');
@@ -119,14 +120,32 @@ export default class Home extends Component {
 		});
 	}
 
+	queryNotebook = () => {
+		const { notebookId } = this.state;
+		const begin = new Date().getTime();
+		const notebooks = Db.Notebook.getWholeData(notebookId);
+		const duration = new Date().getTime() - begin;
+		this.setState({
+			queryDuration: duration,
+			dataCount: notebooks.notes.length,
+			firstData: notebooks
+		});
+	}
+
 	onChangeText = (value) => {
 		this.setState({
 			notebookId: value,
 		});
 	}
 
+	onPageNumChange = (value) => {
+		this.setState({
+			pageNum: Number(value),
+		});
+	}
+
 	render() {
-		const { createDuration, queryDuration, dataCount, notebookId, firstData } = this.state;
+		const { createDuration, queryDuration, dataCount, notebookId, pageNum, firstData } = this.state;
 		return (
 			<View>
 				<Text> Home </Text>
@@ -134,8 +153,11 @@ export default class Home extends Component {
 				<Text>{`createDuration: ${createDuration}`}</Text>
 				<Text>请输入notebookId：</Text>
 				<TextInput value={notebookId} onChangeText={this.onChangeText} style={{ borderWidth: 1, borderColor: '#eee' }}  />
+				<Text>请输入pageNum：</Text>
+				<TextInput value={pageNum} onChangeText={this.onPageNumChange} style={{ borderWidth: 1, borderColor: '#eee' }}  />
 				<Button title="查询Strokes数据" onPress={this.queryData} />
 				<Button title="查询Notebook notes数据" onPress={this.queryNotesData} />
+				<Button title="查询Notebook数据" onPress={this.queryNotebook} />
 				<Text>{`queryDuration: ${queryDuration}`}</Text>
 				<Text>{`dataCount: ${dataCount}`}</Text>
 				<Text>{`firstData: ${JSON.stringify(firstData)}`}</Text>

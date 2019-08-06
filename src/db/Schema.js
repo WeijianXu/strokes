@@ -32,7 +32,7 @@ export const StrokesSchema = {
   name: 'Strokes',
   primaryKey: 'strokeId',
   properties: {
-    strokeId: { type: 'string', indexed: true }, //
+    strokeId: { type: 'string', indexed: true }, // notebookId编号后4位 + 页码(1-3位) + 8位随机
     notebookId: { type: 'string', default: '', indexed: true },
     x: { type: 'int', default: 0 },
     y: { type: 'int', default: 0 },
