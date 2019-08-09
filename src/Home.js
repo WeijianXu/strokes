@@ -13,7 +13,7 @@ export default class Home extends Component {
 			queryDuration: 0,
 			dataCount: 0,
 			notebookId: '',
-			pageNum: 1,
+			pageNum: '1',
 			firstData: {},
 		};
 
@@ -83,7 +83,7 @@ export default class Home extends Component {
 	queryData = () => {
 		const { notebookId, pageNum } = this.state;
 		const begin = new Date().getTime();
-		const strokes = Db.Strokes.groudByNotebookId(notebookId, pageNum);
+		const strokes = Db.Strokes.groudByNotebookId(notebookId, Number(pageNum));
 		console.log('====================================');
 		console.log('strokes: ', strokes);
 		console.log('====================================');
@@ -140,7 +140,7 @@ export default class Home extends Component {
 
 	onPageNumChange = (value) => {
 		this.setState({
-			pageNum: Number(value),
+			pageNum: value,
 		});
 	}
 

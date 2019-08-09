@@ -31,7 +31,7 @@ class DbManager {
    * @param {String} updateMode 写入方式
    */
   update(primaryKey, data, updateMode = 'modified') {
-    const finalData = { [this.primaryKey]: primaryKey, data };
+    const finalData = { [this.primaryKey]: primaryKey, ...data };
     realm.write(this.schema, finalData, updateMode);
   }
 
