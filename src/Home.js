@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Button, TextInput } from 'react-native';
 
 // import strokes from './assets/strokes.json';
-import Db from './controller/DbManager';
+import Db from './db/notebookDb/NoteDbManager';
 import realm from './db/Realm';
 
 export default class Home extends Component {
