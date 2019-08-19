@@ -5,6 +5,8 @@ import { View, Text, Button, TextInput } from 'react-native';
 import Db from './db/notebookDb/NoteDbManager';
 import realm from './db/Realm';
 
+const oneLineData = require('./assets/oneLine') ;
+
 export default class Home extends Component {
 	constructor(props) {
 		super(props);
@@ -21,15 +23,15 @@ export default class Home extends Component {
     realm.init();
 	}
 
-	/* componentDidMount() {
+	componentDidMount() {
 		realm.clear()
-	} */
+	}
 	
 	createData = () => {
 		const begin = new Date().getTime();
 		const notebooks = [];
-		for (let i = 0; i < 5; i++) {
-			const id = Math.floor((Math.random() * 100));
+		for (let i = 0; i < 1; i++) {
+			const id = 1; // const id = Math.floor((Math.random() * 100));
 			const totalNum = id % 10 > 0 ? id % 10 : 10;
 			notebookId = `notebookId_${i}_${id}`;
 			const createOn = new Date().getTime();
@@ -45,7 +47,7 @@ export default class Home extends Component {
 			};
 			const notes = [];
 
-			for (let j = 0; j < totalNum; j++) {
+			for (let j = 1; j < 2; j++) {
 				const pageNum = j;
 				notes.push({
 					pageNum,
@@ -53,20 +55,16 @@ export default class Home extends Component {
 					previewThumbImg: `${pageNum}-previewThumbImg.png`,
 				});
 				// 点触笔数据
-				const strokes = [];
-				for (let k = 0, kLen = 100 * id; k < kLen; k++) {
-					strokes.push({
-						strokeId: `strokeId_${i}_${j}_${k}_${id}`,
-						// data: nodeList,
-						notebookId,
-						x: id,
-						y: k,
-						// p: { type: 'int', default: 0 }, // 压力
-						n: pageNum, // 页码
-						t: new Date().getTime(), // 创建时间
-					});
-				}
-				Db.Strokes.createAll(strokes);
+				// const strokes = [];
+				// for (let k = 0, kLen = 1 ; k < kLen; k++) {
+				// 	strokes.push({
+				// 		pageNum,
+				// 		strokes: oneLineData
+				// 	});
+				// }
+				// Db.StrokesList.createFromNotes(notebookId, strokes);
+				// Db.StrokesList.appendStrokes(notebookId, pageNum, oneLineData);
+				Db.StrokesList.createAt(notebookId, pageNum, oneLineData);
 			}
 			notebook.notes = notes;
 			notebooks.push(notebook);
@@ -83,28 +81,13 @@ export default class Home extends Component {
 	queryData = () => {
 		const { notebookId, pageNum } = this.state;
 		const begin = new Date().getTime();
-		const strokes = Db.Strokes.groudByNotebookId(notebookId, Number(pageNum));
-		console.log('====================================');
-		console.log('strokes: ', strokes);
-		console.log('====================================');
-		const list = [];
-		let  sum = 0;
-		for (let s of strokes) {
-			const { x, y, n, p } = s;
-			// console.log('s: ', s.x);
-			// sum += s.data.length
-			list.push({ x, y, n, p })
-		}
-		/* strokes.forEach(( s, idx) => {
-			sum += s.data.length
-		}) */
-		// console.log('sum: ', sum);
-		console.log('sum: ', list.length);
+		const strokesList = Db.StrokesList.queryByNbIdAndPN(notebookId, Number(pageNum));
+		// console.log('strokesList.strokes: ', strokesList.strokes);
 		const duration = new Date().getTime() - begin;
 		this.setState({
 			queryDuration: duration,
-			dataCount: strokes.length,
-			firstData: list[0]
+			dataCount: strokesList.strokes.length,
+			// firstData: strokesList.strokes
 		});
 	}
 
@@ -159,7 +142,7 @@ export default class Home extends Component {
 				<Button title="查询Notebook notes数据" onPress={this.queryNotesData} />
 				<Button title="查询Notebook数据" onPress={this.queryNotebook} />
 				<Text>{`queryDuration: ${queryDuration}`}</Text>
-				<Text>{`dataCount: ${dataCount}`}</Text>
+				<Text>{`dataCount: ${dataCount} B ~~ ${(dataCount / 1024 / 1024).toFixed(2)} MB`}</Text>
 				<Text>{`firstData: ${JSON.stringify(firstData)}`}</Text>
 			</View>
 		);

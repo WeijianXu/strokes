@@ -55,6 +55,7 @@ export const StrokesListSchema = {
     strokeId: { type: 'string', indexed: true }, // notebookId编号前4位 + 页码(1-3位) + 8位随机
     notebookId: { type: 'string', default: '', indexed: true },
     pageNum: { type: 'int', default: 1 }, // 页码
+    updateOn: { type: 'int', default: 0 },
     strokes: { type: 'string', default: '[]' }, // [{ x, y, p, n, a, t }, ...] 见StrokesSchema
   },
 };

@@ -1,12 +1,11 @@
 import {
-  /* StrokesSchema,  */NotebookSchema, NoteSchema, StrokesListSchema, StrokesListBackupSchema,
+  StrokesSchema, NotebookSchema, NoteSchema, StrokesListSchema, StrokesListBackupSchema,
 } from './notebookDb/Schema';
 
 const Realm = require('realm');
 // const { SchemaVersion, Schema, Enum } = require('./LocalDBDefinition.json');
-const { delFile } = require('../../utils/File');
 
-// Realm.defaultPath = '/Users/bs007/Desktop/www/bs/js_group/owl_scanner_rn_realm/default.realm';
+Realm.defaultPath = '/Users/bs007/Desktop/www/bs/js_group/owl_scanner_rn_realm/default.realm';
 console.log('realm default path: ', Realm.defaultPath);
 
 const SchemaVersion = 4;
@@ -66,6 +65,7 @@ const db = {
     //   }
     // },
   },
+  // delFile = filePath => RNFS.unlink(filePath),
   //  不能使用箭头函数，否则this指向错误
   async init() {
     if (this.realm) {
@@ -77,7 +77,7 @@ const db = {
       return realm;
     } catch (error) {
     // FIXME: 如果出现错误，删除本地的数据库，并重启
-      await delFile(Realm.defaultPath);
+      // await delFile(Realm.defaultPath);
       return this.init();
     }
   },
